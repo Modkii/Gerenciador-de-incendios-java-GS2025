@@ -1,21 +1,16 @@
 package br.com.queimadas.app;
 
 import br.com.queimadas.model.*;
-import br.com.queimadas.utils.JsonUtil;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.*;
 
 public class SistemaQueimadas {
 
-    private static Map<String, FocoIncendio> focos;
-    private static Map<String, Equipe> equipes;
+    private static Map<String, FocoIncendio> focos = new HashMap<>();
+    private static Map<String, Equipe> equipes = new HashMap<>();
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        carregarDados();
-
         int opcao;
         do {
             menu();
@@ -29,10 +24,7 @@ public class SistemaQueimadas {
                 case 4 -> alterarStatusFoco();
                 case 5 -> listarFocos();
                 case 6 -> listarEquipes();
-                case 0 -> {
-                    salvarDados();
-                    System.out.println("Saindo... Dados salvos.");
-                }
+                case 0 -> System.out.println("Saindo...");
                 default -> System.out.println("Opção inválida.");
             }
         } while (opcao != 0);
@@ -50,11 +42,6 @@ public class SistemaQueimadas {
         System.out.print("Escolha uma opção: ");
     }
 
-    private static void pausar() {
-        System.out.println("\nPressione ENTER para voltar ao menu...");
-        scanner.nextLine();
-    }
-
     private static void cadastrarFoco() {
         System.out.print("ID do Foco: ");
         String id = scanner.nextLine();
@@ -67,7 +54,6 @@ public class SistemaQueimadas {
         FocoIncendio foco = new FocoIncendio(id, new Localizacao(lat, lon));
         focos.put(id, foco);
         System.out.println("Foco cadastrado com sucesso.");
-        pausar();
     }
 
     private static void cadastrarEquipe() {
@@ -88,7 +74,6 @@ public class SistemaQueimadas {
         Equipe equipe = new Equipe(id, nome, membros);
         equipes.put(id, equipe);
         System.out.println("Equipe cadastrada com sucesso.");
-        pausar();
     }
 
     private static void designarEquipe() {
@@ -106,7 +91,6 @@ public class SistemaQueimadas {
         } else {
             System.out.println("Foco ou equipe não encontrados.");
         }
-        pausar();
     }
 
     private static void alterarStatusFoco() {
@@ -134,40 +118,21 @@ public class SistemaQueimadas {
         } else {
             System.out.println("Foco não encontrado.");
         }
-        pausar();
     }
 
     private static void listarFocos() {
         if (focos.isEmpty()) {
             System.out.println("Nenhum foco cadastrado.");
-        } else {
-            focos.values().forEach(System.out::println);
+            return;
         }
-        pausar();
+        focos.values().forEach(System.out::println);
     }
 
     private static void listarEquipes() {
         if (equipes.isEmpty()) {
             System.out.println("Nenhuma equipe cadastrada.");
-        } else {
-            equipes.values().forEach(System.out::println);
+            return;
         }
-        pausar();
-    }
-
-    private static void carregarDados() {
-        Type tipoFocos = new TypeToken<Map<String, FocoIncendio>>() {}.getType();
-        Type tipoEquipes = new TypeToken<Map<String, Equipe>>() {}.getType();
-
-        focos = JsonUtil.lerDeArquivo("focos.json", tipoFocos);
-        if (focos == null) focos = new HashMap<>();
-
-        equipes = JsonUtil.lerDeArquivo("equipes.json", tipoEquipes);
-        if (equipes == null) equipes = new HashMap<>();
-    }
-
-    private static void salvarDados() {
-        JsonUtil.salvarParaArquivo("focos.json", focos);
-        JsonUtil.salvarParaArquivo("equipes.json", equipes);
+        equipes.values().forEach(System.out::println);
     }
 }
