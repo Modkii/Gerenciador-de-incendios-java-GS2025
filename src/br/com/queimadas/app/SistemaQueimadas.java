@@ -54,6 +54,7 @@ public class SistemaQueimadas {
         FocoIncendio foco = new FocoIncendio(id, new Localizacao(lat, lon));
         focos.put(id, foco);
         System.out.println("Foco cadastrado com sucesso.");
+        pausar();
     }
 
     private static void cadastrarEquipe() {
@@ -74,6 +75,7 @@ public class SistemaQueimadas {
         Equipe equipe = new Equipe(id, nome, membros);
         equipes.put(id, equipe);
         System.out.println("Equipe cadastrada com sucesso.");
+        pausar();
     }
 
     private static void designarEquipe() {
@@ -91,6 +93,7 @@ public class SistemaQueimadas {
         } else {
             System.out.println("Foco ou equipe não encontrados.");
         }
+        pausar();
     }
 
     private static void alterarStatusFoco() {
@@ -118,21 +121,29 @@ public class SistemaQueimadas {
         } else {
             System.out.println("Foco não encontrado.");
         }
+        pausar();
     }
 
     private static void listarFocos() {
         if (focos.isEmpty()) {
             System.out.println("Nenhum foco cadastrado.");
-            return;
+        } else {
+            focos.values().forEach(System.out::println);
         }
-        focos.values().forEach(System.out::println);
+        pausar();
     }
 
     private static void listarEquipes() {
         if (equipes.isEmpty()) {
             System.out.println("Nenhuma equipe cadastrada.");
-            return;
+        } else {
+            equipes.values().forEach(System.out::println);
         }
-        equipes.values().forEach(System.out::println);
+        pausar();
+    }
+
+    private static void pausar() {
+        System.out.println("\nPressione ENTER para voltar ao menu...");
+        scanner.nextLine();
     }
 }
